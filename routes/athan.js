@@ -1,9 +1,14 @@
+const PrayTimes = require('../utils/praytimes');
+
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
 
+
+router.get('/', function(req, res, next) {
+    var PT = new PrayTimes('ISNA');
+    accountId = req.query.accountid;
+    console.log("account id is afterwards: " + accountId);
   res.send(JSON.stringify({
     frames: [
         {
