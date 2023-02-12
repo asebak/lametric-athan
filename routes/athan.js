@@ -66,17 +66,9 @@ router.get('/', function(req, res, next) {
         "cycles": 1,
         "frames": [
            {
-              "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAUklEQVQYlWNUVFBgYGBgYBC98uE/AxJ4rSPAyMDAwMCETRJZjAnGgOlAZote+fCfCV0nOmA0+yKAYTwygJuAzQoGBgYGRkUFBQZ0dyDzGQl5EwCTESNpFb6zEwAAAABJRU5ErkJggg==",
               "text": "SOUND IS PLAYING!"
            }
-        ],
-        "sound": {
-            "url":"https://dl.espressif.com/dl/audio/gs-16b-2c-44100hz.mp3",
-            "fallback": {
-                "category": "notifications",
-                "id": "cat"
-            }
-        }
+        ]
     }
 };
 
