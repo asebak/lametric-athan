@@ -11,10 +11,10 @@ class PrayerSlot {
         return tt[0] * 60 + tt[1] * 1;
     }
 
-    isCurrent(currentTime, nextTime) {
-        let t = this.getTotalMinutes(currentTime);
-        let s = this.getTotalMinutes(this.time);
-        let e = this.getTotalMinutes(nextTime);
+    isCurrent(current, start, end) {
+        let t = this.getTotalMinutes(current);
+        let s = this.getTotalMinutes(start);
+        let e = this.getTotalMinutes(end);
     
         let r = false;
     
@@ -24,7 +24,7 @@ class PrayerSlot {
             }
         }
         else {
-            r = !this.isCurrent(currentTime, nextTime, this.time);
+            r = !this.isCurrent(current, end, start);
         }
     
         return r;
@@ -85,7 +85,7 @@ class CircularLinkedList {
       let counter = 0
       let currentNode = this.head
   
-      while (!currentNode.value.isCurrent(currentTime, currentNode.next.value.time)) {
+      while (!currentNode.value.isCurrent(currentTime, currentNode.value.time, currentNode.next.value.time)) {
         currentNode = currentNode.next
         counter++
       }

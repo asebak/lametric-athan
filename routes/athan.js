@@ -24,14 +24,17 @@ router.get('/', function(req, res, next) {
             timezone = geo.timezone
         }
     }
-    console.log(ip);
-    console.log(geo);
     //lat = 34.912;
     //long = -82.4666;
     //timezone = "America/New_York";
+
+    //timezone = 'Europe/Helsinki'
+    //lat = 60.1708
+    //long = 24.9375
     var currentDate = new Date( new Date().toLocaleString("en-US", { timeZone: timezone }));
     var currentTime = currentDate.getHours() + ':' + fillInZeros(currentDate.getMinutes());
     const schedule = prayTimes.getTimes(currentDate, [lat, long, 0], getOffsetHoursFromTimeZone(timezone), 0, '24h')
+
 
 
 
@@ -57,7 +60,7 @@ router.get('/', function(req, res, next) {
     var frames = [];
 
     frames.push({
-        text: `${nextSlot.name} at ${nextSlot.time}`,
+        text: `${nextSlot.name}: ${nextSlot.time}`,
         icon: PRAY_ICON,
         index: 0
     })
