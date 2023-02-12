@@ -7,6 +7,11 @@ const PRAY_ICON = "i26556";
 const slots = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
 router.get('/', function(req, res, next) {
+    res.send(JSON.stringify({
+        frames: []
+    }, null, 3));
+
+
     var prayTimes = new PrayTimes('ISNA');
     var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
     var geo = geoip.lookup(ip);
@@ -60,9 +65,9 @@ router.get('/', function(req, res, next) {
         index: 0
     })
 
-    res.send(JSON.stringify({
-    frames: frames
-}, null, 3));
+    //res.send(JSON.stringify({
+    //frames: frames
+    //}, null, 3));
 
 
 });
