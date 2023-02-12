@@ -24,9 +24,11 @@ router.get('/', function(req, res, next) {
             timezone = geo.timezone
         }
     }
-    lat = 34.912;
-    long = -82.4666;
-    timezone = "America/New_York";
+    console.log(ip);
+    console.log(geo);
+    //lat = 34.912;
+    //long = -82.4666;
+    //timezone = "America/New_York";
     var currentDate = new Date( new Date().toLocaleString("en-US", { timeZone: timezone }));
     var currentTime = currentDate.getHours() + ':' + fillInZeros(currentDate.getMinutes());
     const schedule = prayTimes.getTimes(currentDate, [lat, long, 0], getOffsetHoursFromTimeZone(timezone), 0, '24h')
