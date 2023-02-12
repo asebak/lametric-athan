@@ -11,6 +11,7 @@ router.get('/', function(req, res, next) {
     var geo = geoip.lookup(ip);
     var lat = req.query.lat;
     var long = req.query.long;
+    console.log(geo);
     if(geo) {
         if(!lat) {
             lat = geo.ll[0]
