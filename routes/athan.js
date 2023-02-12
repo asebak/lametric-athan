@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
             lat = geo.ll[0]
         }
         if(!long) {
-            lat = geo.ll[1]
+            long = geo.ll[1]
         }
     }
     console.log("lat:" + lat);
