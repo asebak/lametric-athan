@@ -59,30 +59,21 @@ router.get('/', function(req, res, next) {
 
     var frames = [];
 
-  var data = { 
-        "cycles": 1,
-        "frames": [
-           {
-              "text": "SOUND IS PLAYING!"
-           }
-        ]
-};
-
-   /* frames.push({
+    frames.push({
         text: `Currently: ${currentSlot.name}:`,
+        icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAUklEQVQYlWNUVFBgYGBgYBC98uE/AxJ4rSPAyMDAwMCETRJZjAnGgOlAZote+fCfCV0nOmA0+yKAYTwygJuAzQoGBgYGRkUFBQZ0dyDzGQl5EwCTESNpFb6zEwAAAABJRU5ErkJggg==",
         index: 0
     })
 
     frames.push({
         text: `${nextSlot.name}: ${nextSlot.time}`,
-        icon: PRAY_ICON,
+        icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAUklEQVQYlWNUVFBgYGBgYBC98uE/AxJ4rSPAyMDAwMCETRJZjAnGgOlAZote+fCfCV0nOmA0+yKAYTwygJuAzQoGBgYGRkUFBQZ0dyDzGQl5EwCTESNpFb6zEwAAAABJRU5ErkJggg==",
         index: 1
     })
-    */
+    
 
     res.send(JSON.stringify({
-    //frames: frames
-    data
+    frames: frames
 }, null, 3));
 
 
