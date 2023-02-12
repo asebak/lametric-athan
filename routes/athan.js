@@ -59,17 +59,13 @@ router.get('/', function(req, res, next) {
 
     var frames = [];
 
-  var data = {
-    "priority": "warning",
-    "icon_type": "info",
-    "model": {
+  var data = { 
         "cycles": 1,
         "frames": [
            {
               "text": "SOUND IS PLAYING!"
            }
         ]
-    }
 };
 
    /* frames.push({
