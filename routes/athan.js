@@ -24,9 +24,9 @@ router.get('/', function(req, res, next) {
             timezone = geo.timezone
         }
     }
-    //lat = 34.912;
-    //long = -82.4666;
-    //timezone = "America/New_York";
+    lat = 34.912;
+    long = -82.4666;
+    timezone = "America/New_York";
 
     //timezone = 'Europe/Helsinki'
     //lat = 60.1708
@@ -38,7 +38,7 @@ router.get('/', function(req, res, next) {
 
 
 
-    let prayerSlots = []
+    //let prayerSlots = []
     var list = new CircularLinkedList();
     for(var i = 0; i < slots.length; i++) {
         //old way
@@ -59,14 +59,42 @@ router.get('/', function(req, res, next) {
 
     var frames = [];
 
-    frames.push({
-        text: `${nextSlot.name}: ${nextSlot.time}`,
-        icon: PRAY_ICON,
+  var data = {
+    "priority": "warning",
+    "icon_type": "info",
+    "model": {
+        "cycles": 1,
+        "frames": [
+           {
+              "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAUklEQVQYlWNUVFBgYGBgYBC98uE/AxJ4rSPAyMDAwMCETRJZjAnGgOlAZote+fCfCV0nOmA0+yKAYTwygJuAzQoGBgYGRkUFBQZ0dyDzGQl5EwCTESNpFb6zEwAAAABJRU5ErkJggg==",
+              "text": "SOUND IS PLAYING!"
+           }
+        ],
+        "sound": {
+            "url":"https://dl.espressif.com/dl/audio/gs-16b-2c-44100hz.mp3",
+            "fallback": {
+                "category": "notifications",
+                "id": "cat"
+            }
+        }
+    }
+};
+
+   /* frames.push({
+        text: `Currently: ${currentSlot.name}:`,
         index: 0
     })
 
+    frames.push({
+        text: `${nextSlot.name}: ${nextSlot.time}`,
+        icon: PRAY_ICON,
+        index: 1
+    })
+    */
+
     res.send(JSON.stringify({
-    frames: frames
+    //frames: frames
+    data
 }, null, 3));
 
 
