@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var config = require('../models/config');
+var LaMetricApi = require('../core/lametricApi')
 const { AuthorizationCode } = require('simple-oauth2');
   const scope = ['basic', 'devices_read'];
   const redirectUri = 'http://localhost:3000/auth';
@@ -28,6 +29,8 @@ router.get('/', async function(req, res, next) {
     
       try {
         const accessToken = await client.getToken(tokenParams, {json: true});
+        ///var api = new LaMetricApi(accessToken.token.access_token);
+        //api.getDevices();
         res.send(accessToken.token, null, 3);
       } catch (error) {
         console.log('Access Token Error', error.message);
