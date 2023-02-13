@@ -3,8 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var schedule = require('node-schedule');
 
+var authRouter = require('./routes/auth');
 var athanRouter = require('./routes/athan');
+var ScheduleJobHandler = require('./core/schedulejobhandler');
+
+var schedulejobhandler = new ScheduleJobHandler();
+const job = schedule.scheduleJob('* * * * *', schedulejobhandler.process);
 
 var app = express();
 
@@ -15,6 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/athan', athanRouter);
+app.use('/auth', authRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -30,5 +38,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
