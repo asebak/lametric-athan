@@ -1,13 +1,10 @@
-var PrayTimes = require('../utils/praytimes');
-const {CircularLinkedList, PrayerSlot } = require('../models/prayerslot')
+var ComputeTimes = require('../core/computetimes');
 var geoip = require('geoip-lite');
 var express = require('express');
 var router = express.Router();
 const PRAY_ICON = "i26556";
-const slots = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
 router.get('/', function(req, res, next) {
-    var prayTimes = new PrayTimes('ISNA');
     var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
     var geo = geoip.lookup(ip);
     var lat = req.query.lat;
@@ -24,30 +21,10 @@ router.get('/', function(req, res, next) {
             timezone = geo.timezone
         }
     }
+    
+    var computePrayerTimes = new ComputeTimes(lat, long, timezone);
+    var prayerSlot = computePrayerTimes.calculate();
 
-    var currentDate = new Date( new Date().toLocaleString("en-US", { timeZone: timezone }));
-    var currentTime = currentDate.getHours() + ':' + fillInZeros(currentDate.getMinutes());
-    const schedule = prayTimes.getTimes(currentDate, [lat, long, 0], getOffsetHoursFromTimeZone(timezone), 0, '24h')
-
-
-
-
-    //let prayerSlots = []
-    var list = new CircularLinkedList();
-    for(var i = 0; i < slots.length; i++) {
-        //old way
-       // if(i == slots.length - 1) {
-           // prayerSlots.push(new PrayerSlot(slots[i], schedule[slots[i]].replace(/^0/, ''), schedule[slots[0]].replace(/^0/, ''), currentTime));
-        //} else{
-            //prayerSlots.push(new PrayerSlot(slots[i], schedule[slots[i]].replace(/^0/, ''), schedule[slots[i + 1]].replace(/^0/, ''), currentTime));
-       // }
-        //list.append(new PrayerSlot(slots[i], schedule[slots[i]].replace(/^0/, ''), schedule[slots[i + 1]].replace(/^0/, ''), currentTime))
-        list.append(new PrayerSlot(slots[i], schedule[slots[i]].replace(/^0/, '')))
-    }
-        //var prayerSlot = prayerSlots.find(prayerSlot => prayerSlot.isCurrent())
-
-
-    var prayerSlot = list.traverse(currentTime);
     var currentSlot = prayerSlot.value;
     var nextSlot = prayerSlot.next.value;
 
@@ -72,18 +49,5 @@ router.get('/', function(req, res, next) {
 
 });
 
-const fillInZeros = (n) => {
-    if (n < 10) {
-        n = '0' + n;
-    }
-    return n;
-}
-
-const getOffsetHoursFromTimeZone = (tz) => {
-    let date = new Date();
-    let utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
-    let tzDate = new Date(date.toLocaleString('en-US', { timeZone: tz }));
-    return (tzDate.getTime() - utcDate.getTime()) / 3600000;
-}
 
 module.exports = router;

@@ -2,8 +2,6 @@ class PrayerSlot {
     constructor(name, time) {
         this.name = name[0].toUpperCase() + name.slice(1).toLowerCase();
         this.time = time;
-        //this.nextTime = nextTime;
-        //this.currentTime = currentTime;
     }
 
     getTotalMinutes = (t) => {
