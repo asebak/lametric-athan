@@ -37,7 +37,18 @@ class SalatTimesJob {
             var existingLametricJob = handler.getJob(lametricJob.name);
             if(!existingLametricJob) {
                 handler.addJob(lametricJob.name, date, function() {
+                    console.log("executing notification:" + nextPrayer.name)
                     //todo conditional sound
+                    var sound = {}
+                    if(nextPrayer.name !== 'Sunrise') {
+                        sound = {
+                            "url":"http://praytimes.org/audio/adhan/Sunni/Adhan%20Makkah.mp3",
+                            "fallback": {
+                                "category": "notifications",
+                                "id": "cat"
+                            }
+                        };
+                    }
                     lametricJob.createNotification(
                         {
                             "priority": "critical",
@@ -50,13 +61,7 @@ class SalatTimesJob {
                                     "text": nextPrayer.name
                                    }
                                 ],
-                                "sound": {
-                                    "url":"http://praytimes.org/audio/adhan/Sunni/Adhan%20Makkah.mp3",
-                                    "fallback": {
-                                        "category": "notifications",
-                                        "id": "cat"
-                                    }
-                                }
+                                "sound":  sound
                             }
                         }
                     );
@@ -75,6 +80,7 @@ class SalatTimesJob {
             diff /= 60;
             var timeDiff =  Math.abs(Math.round(diff));
             if(timeDiff < 10) {
+                console.log("executing warning for less than 10 minutes:" + nextPrayer.name)
                 lametricJob.createNotification(
                     {
                         "priority": "critical",
