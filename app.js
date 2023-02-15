@@ -1,16 +1,14 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var schedule = require('node-schedule');
+const open = require('open');
 
 var authRouter = require('./routes/auth');
 var athanRouter = require('./routes/athan');
-var ScheduleJobHandler = require('./core/schedulejobhandler');
-
-var schedulejobhandler = new ScheduleJobHandler();
-const job = schedule.scheduleJob('* * * * *', schedulejobhandler.process);
 
 var app = express();
 
@@ -39,6 +37,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+open('http://localhost:3000/auth/authorize');
 
 
 module.exports = app;

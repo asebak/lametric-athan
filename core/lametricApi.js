@@ -2,7 +2,7 @@ const axios = require('axios');
 
 var config = require('../models/config');
 
-class LaMetricApi {
+class CloudApi {
  
     constructor(accessToken) {
         this.baseUrl = config.oauthConfig.auth.authorizeHost;
@@ -17,25 +17,32 @@ class LaMetricApi {
             }
         });
     }
+}
+
+class DeviceApi {
+ 
+    constructor(ip, apiKey) {
+        this.baseUrl = `https://${ip}:4343/api/v2/device`;
+        this.accessToken = Buffer.from(`dev:${apiKey}`).toString('base64');
+    }
 
     async getNotifications() {
-        var endpoint = `${this.baseUrl}/api/v2/device/notifications`
+        var endpoint = `${this.baseUrl}/notifications`
         return await axios.get(endpoint, {
             headers: {
-              'Authorization': `Bearer ${this.accessToken}`
+              'Authorization': `Basic ${this.accessToken}`
             }
         });
     }
 
-    async createNotification() {
-        var endpoint = `${this.baseUrl}/api/v2/device/notifications`
-        const body = {};
+    async createNotification(body) {
+        var endpoint = `${this.baseUrl}/notifications`
         return await axios.post(endpoint, body, {
         headers: {
-            'Authorization': `Bearer ${this.accessToken}`
+            'Authorization': `Basic ${this.accessToken}`
         }
         });
     }
 }
 
-module.exports = LaMetricApi
+module.exports = {CloudApi, DeviceApi}
