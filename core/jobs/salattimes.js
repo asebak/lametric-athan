@@ -55,7 +55,6 @@ class SalatTimesJob {
     executeNotification(nextPrayer, lametricJob) {
         return function () {
             console.log("executing notification:" + nextPrayer.name);
-            //todo conditional sound
             var sound = {};
             if (nextPrayer.name !== 'Sunrise') {
                 sound = {

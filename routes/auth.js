@@ -7,7 +7,7 @@ var SalatTimesJob = require('../core/jobs/salattimes');
 
 const { AuthorizationCode } = require('simple-oauth2');
   const scope = ['basic', 'devices_read'];
-  const redirectUri = 'http://localhost:3000/auth';
+  const redirectUri = config.redirectUrl;
 
 const client = new AuthorizationCode(config.oauthConfig);
 

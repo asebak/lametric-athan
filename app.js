@@ -9,6 +9,7 @@ const open = require('open');
 
 var authRouter = require('./routes/auth');
 var athanRouter = require('./routes/athan');
+var config = require('./models/config');
 
 var app = express();
 
@@ -37,7 +38,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-open('http://localhost:3000/auth/authorize');
-
+open(config.redirectUrl + '/authorize');
 
 module.exports = app;
