@@ -6,7 +6,7 @@ var LametricJob = require('./lametric');
 
 class SalatTimesJob {
     constructor() {
-        this.name = "Times"
+        this.name = "Times";
     }
 
     async get(ip, devices) {
@@ -36,50 +36,60 @@ class SalatTimesJob {
 
             var existingLametricJob = handler.getJob(lametricJob.name);
             if(!existingLametricJob) {
-                handler.addJob(lametricJob.name, date, function() {
-                    console.log("executing notification:" + nextPrayer.name)
-                    //todo conditional sound
-                    var sound = {}
-                    if(nextPrayer.name !== 'Sunrise') {
-                        sound = {
-                            "url":"http://praytimes.org/audio/adhan/Sunni/Adhan%20Makkah.mp3",
-                            "fallback": {
-                                "category": "notifications",
-                                "id": "cat"
-                            }
-                        };
-                    }
-                    lametricJob.createNotification(
-                        {
-                            "priority": "critical",
-                            "icon_type": "info",
-                            "model": {
-                                "cycles": 1,
-                                "frames": [
-                                   {
-                                    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADmSURBVChTY3RxcWBkAIJzTawCf7gYihkYGSwY/jPsYfrLsNak/PcdFpDkmXYWjX9sDLuAzCdMvxiiTCp/PwCJgwATiPjHxjgPRLN8ZfACSV6qYOEA8UGAUfC0q+xfNoZHQGPnmpX8Tj3fyCrwm5shHSj3gP/W/7VM/xkY/kDUMnwBEYb1vz+A3cHAYKM+688fJqCRL4CcC0BBf5jRbB8ZYjne/C8FscFuYPzDkASkBH6IMq4728oqYdD0+4tex58fIDlmJSUFRuk9/148d2Re+p+JQes/K0PeUzdmpaem/55JH2Z4CwDOeE61MMSZbgAAAABJRU5ErkJggg==",
-                                    "text": nextPrayer.name
-                                   }
-                                ],
-                                "sound":  sound
-                            }
-                        }
-                    );
-                })
+                console.log("adding new job for " + nextPrayer.name);
+                handler.addJob(lametricJob.name, date, this.executeNotification(nextPrayer, lametricJob))
             } else {
                 var sameDate = !(existingLametricJob.nextInvocation() - date);
                 //only reschedule if the date changed, this will apply only once the day passes
                 if(!sameDate) {
-                    existingLametricJob.reschedule(date)
+                    console.log("rescheduling new job for " + nextPrayer.name);
+                    // existingLametricJob.reschedule(date)
+                    handler.removeJob(lametricJob.name);
+                    console.log("removed job");
+                    console.log("adding new job for " + nextPrayer.name);
+                    handler.addJob(lametricJob.name, date, this.executeNotification(nextPrayer, lametricJob))
                 }
             }
+    }
+
+    executeNotification(nextPrayer, lametricJob) {
+        return function () {
+            console.log("executing notification:" + nextPrayer.name);
+            //todo conditional sound
+            var sound = {};
+            if (nextPrayer.name !== 'Sunrise') {
+                sound = {
+                    "url": "http://praytimes.org/audio/adhan/Sunni/Adhan%20Makkah.mp3",
+                    "fallback": {
+                        "category": "notifications",
+                        "id": "cat"
+                    }
+                };
+            }
+            lametricJob.createNotification(
+                {
+                    "priority": "critical",
+                    "icon_type": "info",
+                    "model": {
+                        "cycles": 1,
+                        "frames": [
+                            {
+                                "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADmSURBVChTY3RxcWBkAIJzTawCf7gYihkYGSwY/jPsYfrLsNak/PcdFpDkmXYWjX9sDLuAzCdMvxiiTCp/PwCJgwATiPjHxjgPRLN8ZfACSV6qYOEA8UGAUfC0q+xfNoZHQGPnmpX8Tj3fyCrwm5shHSj3gP/W/7VM/xkY/kDUMnwBEYb1vz+A3cHAYKM+688fJqCRL4CcC0BBf5jRbB8ZYjne/C8FscFuYPzDkASkBH6IMq4728oqYdD0+4tex58fIDlmJSUFRuk9/148d2Re+p+JQes/K0PeUzdmpaem/55JH2Z4CwDOeE61MMSZbgAAAABJRU5ErkJggg==",
+                                "text": nextPrayer.name
+                            }
+                        ],
+                        "sound": sound
+                    }
+                }
+            );
+        };
     }
 
     checkUpcomingPrayer(lametricJob, date, nextPrayer) {
             var diff =(date.getTime() - new Date().getTime()) / 1000;
             diff /= 60;
             var timeDiff =  Math.abs(Math.round(diff));
-            if(timeDiff < 10) {
+            if(timeDiff < 60) {
                 console.log("executing warning for less than 10 minutes:" + nextPrayer.name)
                 lametricJob.createNotification(
                     {

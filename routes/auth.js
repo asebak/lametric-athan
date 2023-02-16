@@ -38,11 +38,12 @@ router.get('/', async function(req, res, next) {
           var devices = result.data;
           var handler = ScheduleJobHandler.getInstance();
           salatTimesJob = new SalatTimesJob();
-          //probably run once an hour or something
-          handler.addJob(salatTimesJob.name, '*/15 * * * *', function(){
+          handler.addJob(salatTimesJob.name, '*/10 * * * *', function(){
+            console.log("running salat time checker job...")
             salatTimesJob.get(ip, devices);
           });
-          res.status(result.status).send(JSON.stringify("message: Athan scheduled"));
+          console.log("authenticated succesfully, jobs configured.");
+          res.status(result.status).send();
         } else {
           res.status(400).send();
         }
