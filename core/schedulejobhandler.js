@@ -18,7 +18,7 @@ class Singleton {
         var job = this.getJob(name);
         job.cancel();
 
-        this.jobs =  this.jobs.filter(job => job.name !== name)
+        this.jobs =  this.jobs.filter(job => job.name !== name);
     }
 
     process() {

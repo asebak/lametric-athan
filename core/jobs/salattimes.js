@@ -88,8 +88,8 @@ class SalatTimesJob {
             var diff =(date.getTime() - new Date().getTime()) / 1000;
             diff /= 60;
             var timeDiff =  Math.abs(Math.round(diff));
-            if(timeDiff < 60) {
-                console.log("executing warning for less than 10 minutes:" + nextPrayer.name)
+            if(timeDiff < 30) {
+                console.log("executing warning for: " + nextPrayer.name)
                 lametricJob.createNotification(
                     {
                         "priority": "critical",
