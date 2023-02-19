@@ -40,7 +40,11 @@ router.get('/', async function(req, res, next) {
           salatTimesJob = new SalatTimesJob();
           handler.addJob(salatTimesJob.name, '*/10 * * * *', function(){
             console.log("running salat time checker job...")
-            salatTimesJob.get(ip, devices);
+            try {
+              salatTimesJob.get(ip, devices);
+            } catch (error) {
+              console.warn("error occured running salat job:" + JSON.stringify(error));
+            }
           });
           console.log("authenticated succesfully, jobs configured.");
           res.status(result.status).send();

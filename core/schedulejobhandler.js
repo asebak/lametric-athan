@@ -11,14 +11,21 @@ class Singleton {
     }
 
     getJob(name) {
-        return this.jobs.find(job => job.name === name);
+        if(!this.jobs || this.jobs.length <= 0) {
+            return null;
+        }
+        return this.jobs.find(job => job?.name === name);
     }
     
     removeJob(name) {
         var job = this.getJob(name);
-        job.cancel();
-
-        this.jobs =  this.jobs.filter(job => job.name !== name);
+        if(job) {
+            job.cancel();
+        }
+        if(this.jobs.length <= 0) {
+            return;
+        }
+        this.jobs =  this.jobs.filter(job => job?.name !== name);
     }
 
     process() {
