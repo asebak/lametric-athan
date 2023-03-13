@@ -56,7 +56,16 @@ class SalatTimesJob {
         return function () {
             console.log("executing notification:" + nextPrayer.name);
             var sound = {};
-            if (nextPrayer.name !== 'Sunrise') {
+            if (nextPrayer.name === 'Fajr') {
+                sound = {
+                    "url": "https://media.sd.ma/assabile/adhan_3435370/ddb21f7363eb.mp3",
+                    "fallback": {
+                        "category": "notifications",
+                        "id": "cat"
+                    }
+                };
+            }
+            else if (nextPrayer.name !== 'Sunrise') {
                 sound = {
                     "url": "http://praytimes.org/audio/adhan/Sunni/Adhan%20Makkah.mp3",
                     "fallback": {
@@ -88,14 +97,14 @@ class SalatTimesJob {
             var diff =(date.getTime() - new Date().getTime()) / 1000;
             diff /= 60;
             var timeDiff =  Math.abs(Math.round(diff));
-            if(timeDiff < 30) {
+            if(timeDiff < 60) {
                 console.log("executing warning for: " + nextPrayer.name)
                 lametricJob.createNotification(
                     {
                         "priority": "critical",
                         "icon_type": "info",
                         "model": {
-                            "cycles": 5,
+                            "cycles": 3,
                             "frames": [
                                {
                                 "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADmSURBVChTY3RxcWBkAIJzTawCf7gYihkYGSwY/jPsYfrLsNak/PcdFpDkmXYWjX9sDLuAzCdMvxiiTCp/PwCJgwATiPjHxjgPRLN8ZfACSV6qYOEA8UGAUfC0q+xfNoZHQGPnmpX8Tj3fyCrwm5shHSj3gP/W/7VM/xkY/kDUMnwBEYb1vz+A3cHAYKM+688fJqCRL4CcC0BBf5jRbB8ZYjne/C8FscFuYPzDkASkBH6IMq4728oqYdD0+4tex58fIDlmJSUFRuk9/148d2Re+p+JQes/K0PeUzdmpaem/55JH2Z4CwDOeE61MMSZbgAAAABJRU5ErkJggg==",
