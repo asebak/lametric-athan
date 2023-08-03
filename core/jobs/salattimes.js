@@ -67,7 +67,7 @@ class SalatTimesJob {
             }
             else if (nextPrayer.name !== 'Sunrise') {
                 sound = {
-                    "url": "http://praytimes.org/audio/adhan/Sunni/Adhan%20Makkah.mp3",
+                    "url": "https://media.sd.ma/assabile/adhan_3435370/166d1f7c435a.mp3",
                     "fallback": {
                         "category": "notifications",
                         "id": "cat"
