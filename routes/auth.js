@@ -4,6 +4,7 @@ var config = require('../models/config');
 var LaMetricApi = require('../core/lametricApi')
 var ScheduleJobHandler = require('../core/schedulejobhandler');
 var SalatTimesJob = require('../core/jobs/salattimes');
+var SurahJob = require('../core/jobs/surah');
 
 const { AuthorizationCode } = require('simple-oauth2');
   const scope = ['basic', 'devices_read'];
@@ -37,6 +38,7 @@ router.get('/', async function(req, res, next) {
         if(result.status === 200) {
           var devices = result.data;
           var handler = ScheduleJobHandler.getInstance();
+          surahJob = new SurahJob();
           salatTimesJob = new SalatTimesJob();
           handler.addJob(salatTimesJob.name, '*/10 * * * *', function(){
             console.log("running salat time checker job...")
@@ -44,6 +46,14 @@ router.get('/', async function(req, res, next) {
               salatTimesJob.get(ip, devices);
             } catch (error) {
               console.warn("error occured running salat job:" + JSON.stringify(error));
+            }
+          });
+          handler.addJob(surahJob.name, '0 9 * * 5', function(){
+            console.log("running surah al khaf job...")
+            try {
+              surahJob.play("Al-Kahf", "018", devices);
+            } catch (error) {
+              console.warn("error occured surah al khaf job:" + JSON.stringify(error));
             }
           });
           console.log("authenticated succesfully, jobs configured.");
