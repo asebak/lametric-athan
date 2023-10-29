@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "start-nas": "sudo /usr/local/lib/node_modules/forever/bin/forever start -o out.log -e err.log ./bin/www",
     "lint": "eslint **/*.js --ignore-pattern node_modules/**"
   },
   "dependencies": {
@@ -16,7 +17,8 @@
     "morgan": "~1.9.1",
     "node-schedule": "^2.1.1",
     "open": "^8.4.1",
-    "simple-oauth2": "^5.0.0"
+    "simple-oauth2": "^5.0.0",
+    "forever":"4.0.3"
   },
   "devDependencies": {
     "eslint": "^8.34.0"
