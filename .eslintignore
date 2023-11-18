@@ -1,4 +1,4 @@
-node_modules/
-public/
-bin/
-build/
+node_modules/*
+public/*
+bin/*
+build/*
