@@ -1,29 +1,32 @@
 var PrayTimes = require('../utils/praytimes');
-const {CircularLinkedList, PrayerSlot } = require('../models/prayerslot')
+const {CircularLinkedList, PrayerSlot, slots } = require('../models/prayerslot')
+const { find } = require('geo-tz')
 
-const slots = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
 class ComputeTimes {
 
-    constructor(lat,long,timezone) {
+    constructor(lat,long) {
         this.lat = lat;
         this.long = long;
-        this.timezone = timezone;
+        this.timezone = find(lat, long)[0];
+        this.currentDate = new Date( new Date().toLocaleString("en-US", { timeZone: this.timezone }));
     }
     
 
     calculate() {
-        var prayTimes = new PrayTimes('ISNA');
-        var currentDate = new Date( new Date().toLocaleString("en-US", { timeZone: this.timezone }));
-        var currentTime = currentDate.getHours() + ':' + this.appendZero(currentDate.getMinutes());
-        const schedule = prayTimes.getTimes(currentDate, [this.lat, this.long, 0], this.getOffsetHoursFromTz(this.timezone), 0, '24h')
-    
+        const schedule = this.getSchedule();
         var list = new CircularLinkedList();
         for(var i = 0; i < slots.length; i++) {
             list.append(new PrayerSlot(slots[i], schedule[slots[i]].replace(/^0/, '')))
         }
 
+        var currentTime = this.currentDate.getHours() + ':' + this.appendZero(this.currentDate.getMinutes());
         return list.traverse(currentTime);
+    }
+
+    getSchedule() {
+        var prayTimes = new PrayTimes('ISNA');
+        return prayTimes.getTimes(this.currentDate, [this.lat, this.long, 0], this.getOffsetHoursFromTz(this.timezone), 0, '24h')
     }
 
     appendZero = (n) => {
@@ -40,5 +43,4 @@ class ComputeTimes {
         return (tzDate.getTime() - utcDate.getTime()) / 3600000;
     }
 }
-
 module.exports = ComputeTimes

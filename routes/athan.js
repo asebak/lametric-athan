@@ -1,49 +1,21 @@
 var ComputeTimes = require('../core/computetimes');
-var geoip = require('geoip-lite');
+const {PrayerSlot, slots } = require('../models/prayerslot')
 var express = require('express');
 var router = express.Router();
-const PRAY_ICON = "i26556";
 
 router.get('/', function(req, res, next) {
-    var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
-    var geo = geoip.lookup(ip);
     var lat = req.query.lat;
     var long = req.query.long;
-    var timezone = req.query.timeZone
-    if(geo) {
-        if(!lat) {
-            lat = geo.ll[0]
-        }
-        if(!long) {
-            long = geo.ll[1]
-        }
-        if(!timezone) {
-            timezone = geo.timezone
-        }
+
+    var computePrayerTimes = new ComputeTimes(lat, long);
+    var prayerSlots = computePrayerTimes.getSchedule();
+    var list = []
+    for(var i = 0; i < slots.length; i++) {
+        list.push(new PrayerSlot(slots[i], prayerSlots[slots[i]].replace(/^0/, '')))
     }
     
-    var computePrayerTimes = new ComputeTimes(lat, long, timezone);
-    var prayerSlot = computePrayerTimes.calculate();
-
-    var currentSlot = prayerSlot.value;
-    var nextSlot = prayerSlot.next.value;
-
-    var frames = [];
-
-    frames.push({
-        text: `Currently: ${currentSlot.name}:`,
-        index: 0
-    })
-
-    frames.push({
-        text: `${nextSlot.name}: ${nextSlot.time}`,
-        icon: PRAY_ICON,
-        index: 1
-    })
-    
-
     res.send(JSON.stringify({
-    frames: frames
+        times: list
 }, null, 3));
 
 

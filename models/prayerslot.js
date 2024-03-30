@@ -93,4 +93,7 @@ class CircularLinkedList {
     
 }
 
-module.exports = {CircularLinkedList, PrayerSlot}
+const slots = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+
+
+module.exports = {CircularLinkedList, PrayerSlot, slots}
