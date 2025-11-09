@@ -58,7 +58,7 @@ class SalatTimesJob {
             var sound = {};
             if (nextPrayer.name === 'Fajr') {
                 sound = {
-                    "url": "https://media.sd.ma/assabile/adhan_3435370/ddb21f7363eb.mp3",
+                    "url": "https://media.assabile.com/assabile/adhan_3435370/ddb21f7363eb.mp3",
                     "fallback": {
                         "category": "notifications",
                         "id": "cat"
@@ -67,7 +67,7 @@ class SalatTimesJob {
             }
             else if (nextPrayer.name !== 'Sunrise') {
                 sound = {
-                    "url": "https://media.sd.ma/assabile/adhan_3435370/166d1f7c435a.mp3",
+                    "url": "https://media.assabile.com/assabile/adhan_3435370/f5370aa1a7e2.mp3",
                     "fallback": {
                         "category": "notifications",
                         "id": "cat"
